@@ -17,6 +17,7 @@ const io = new Server(server, {
     methods: ["GET", "POST", "PUT", "DELETE"]
   }
 });
+app.set('io', io);
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
   socket.on('disconnect', () => {
@@ -26,6 +27,7 @@ io.on("connection", (socket) => {
     io.emit('contractUpdated', data);
   });
 });
+
 app.use('/api', require('./Router/Contracts.Route'));
   
 server.listen(1234, () => {
