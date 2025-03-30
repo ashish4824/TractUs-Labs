@@ -21,6 +21,8 @@ async function getContracts(req, res) {
         res.status(500).json({ error: error.message });
     }
 }
+
+
 async function postContracts(req, res) {
     try {
         const { client_name, contract_id, status } = req.body;
