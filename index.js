@@ -7,13 +7,17 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: process.env.NODE_ENV === 'production' 
+    ? ["https://tractuslabs.vercel.app"]
+    : "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "DELETE"]
 }));
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.NODE_ENV === 'production'
+      ? ["https://tractuslabs.vercel.app"] 
+      : "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"]
   }
 });
@@ -29,7 +33,10 @@ io.on("connection", (socket) => {
 });
 
 app.use('/api', require('./Router/Contracts.Route'));
-  
-server.listen(1234, () => {
-  console.log(`Server is running on port http://localhost:1234`);
+
+const PORT = process.env.PORT || 1234;
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports = app;
